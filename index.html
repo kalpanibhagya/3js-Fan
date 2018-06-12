@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>Fan using ThreeJS</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script>
+			// Our Javascript will go here.
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			
+			// Fan Object Scene Node
+			var Fan = new THREE.Object3D();
+			scene.add(Fan);
+			
+			// Base Mesh of Fan Object Scene Node
+			var baseMesh1_geom = new THREE.BoxGeometry( 1, 0.2, 1 );
+			var baseMesh2_geom = new THREE.BoxGeometry( 0.1, 2, 0.1 );
+			
+			var baseMesh_mat = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+			
+			var baseMesh1 = new THREE.Mesh( baseMesh1_geom, baseMesh_mat );
+			var baseMesh2 = new THREE.Mesh( baseMesh2_geom, baseMesh_mat );
+			Fan.add( baseMesh1 );
+			Fan.add( baseMesh2 );
+			baseMesh2.position.y = 1;
+			
+			// Head object Scene Node
+			var Head = new THREE.Object3D();
+			Fan.add(Head);
+			Head.position.y = 2;
+			
+			var headMesh_geom = new THREE.CylinderGeometry(0.25, 0.25, 1, 32);
+			var headMesh_mat = new THREE.MeshBasicMaterial( { color: 0x00ffff } );
+			var headMesh = new THREE.Mesh(headMesh_geom, headMesh_mat);
+			Head.add(headMesh);
+			headMesh.position.x = 0.2;
+			headMesh.rotation.z = Math.PI / 2;
+			
+			// 'A' object Scene Node
+			var A = new THREE.Object3D();
+			Head.add(A);
+			A.position.x = 0.75;
+			
+			var AMesh_geom = new THREE.CylinderGeometry(0.15, 0.15, 0.1, 32);
+			var AMesh_mat = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+			var AMesh = new THREE.Mesh(AMesh_geom, AMesh_mat);
+			A.add(AMesh);
+			AMesh.rotation.z = Math.PI / 2;
+			
+			// Blades
+			var Blade_geom = new THREE.BoxGeometry(0.08, 1, 0.15);
+			var Blade_mat = new THREE.MeshBasicMaterial( { color: 0xff00ff } );
+			var BladeMesh1 = new THREE.Mesh(Blade_geom, Blade_mat);
+			A.add(BladeMesh1);
+			BladeMesh1.position.y = 0.5;
+			
+			var BladeMesh2 = new THREE.Mesh(Blade_geom, Blade_mat);
+			A.add(BladeMesh2);
+			BladeMesh2.rotation.x = Math.PI / 3;
+			BladeMesh2.position.y = -0.5 * Math.cos(Math.PI/3);
+			BladeMesh2.position.z = -0.5 * Math.sin(Math.PI/3);
+			
+			var BladeMesh3 = new THREE.Mesh(Blade_geom, Blade_mat);
+			A.add(BladeMesh3);
+			BladeMesh3.rotation.x = -Math.PI / 3;
+			BladeMesh3.position.y = -0.5 * Math.cos(Math.PI/3);
+			BladeMesh3.position.z = 0.5 * Math.sin(Math.PI/3);
+			
+			
+			camera.position.z = 5;
+			Fan.rotation.y = -Math.PI / 2;
+			
+			renderer.render(scene, camera);
+			var t = 0;
+			var UpdateFrame = function()
+			{
+				requestAnimationFrame(UpdateFrame);
+				
+				//Fan.rotation.y += -0.01;
+				//Fan.rotation.x += 0.01;
+				//Fan.rotation.z += 0.01;
+				t += 0.01;
+				Head.rotation.y =  ( Math.sin(t) * Math.PI / 4);
+				
+				A.rotation.x += 0.05;
+				
+				renderer.render(scene, camera);
+			}
+			UpdateFrame();
+			
+		</script>
+	</body>
+</html>
